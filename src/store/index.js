@@ -1,11 +1,15 @@
 // import { createStore } from 'redux';
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initialState = { counter: 0, isCounterVisible: true };
+// Counter.js에서 state.counter.counter인 이유:
+const initialCounterState = {
+	counter: 0,
+	isCounterVisible: true,
+};
 
 const counterSlice = createSlice({
 	name: 'counter',
-	initialState,
+	initialState: initialCounterState,
 	reducers: {
 		increment(state) {
 			// we can mutate the state:
@@ -55,11 +59,33 @@ const counterSlice = createSlice({
 // 	return state;
 // };
 
+const initialAuthState = {
+	isAuthenticated: false,
+};
+
+const authSlice = createSlice({
+	name: 'auth',
+	initialState: initialAuthState,
+	reducers: {
+		login(state) {
+			state.isAuthenticated = true;
+		},
+		logout(state) {
+			state.isAuthenticated = false;
+		},
+	},
+});
+
 // const store = createStore(counterReducer);
 const store = configureStore({
-	reducer: counterSlice.reducer,
+	// reducer: counterSlice.reducer,
+	reducer: {
+		counter: counterSlice.reducer, // Counter.js에서 state.counter.counter인 이유:
+		auth: authSlice.reducer,
+	},
 });
 
 export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 
 export default store;
